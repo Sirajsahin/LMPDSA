@@ -1,0 +1,80 @@
+import java.io.*; // for handling input/output
+import java.util.*; // contains Collections framework
+
+// don't change the name of this class
+// you can add inner classes if needed
+class Main {
+	public static void main (String[] args) {
+                      // Your code here
+        Scanner input = new Scanner(System.in);
+        int n = input.nextInt();
+        int[] arr = new int[n];
+        for (int i =0;i< n;i++) {
+            arr[i] = input.nextInt();
+        }
+        System.out.println(getSumOfDiff(arr,n));
+	}
+
+    private static long getSumOfDiff(int[] arr, int n){
+        long sumOfMax = sumMax(arr,n);
+        long sumOfMin = sumMin(arr, n);
+        return sumOfMax - sumOfMin;
+    }
+
+     private static long sumMin(int[] arr, int n){
+        long[] left = new long[n], right = new long[n];
+        Stack<Integer> stack = new Stack<>();
+        
+        for (int i =0;i<n;i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                left[i] += left[stack.peek()] + 1;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+
+         stack = new Stack<>();
+
+        for (int i = n-1;i>=0;i--) {
+             while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                right[i] += right[stack.peek()] + 1;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+
+        long result = 0;
+        for (int i =0;i<n;i++) {
+            result += (left[i] + 1) * (right[i] + 1) * arr[i];
+        }
+        return result;
+     }
+
+    private static long sumMax(int[] arr, int n){
+        long[] left= new long[n], right = new long[n];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i =0;i<n;i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                left[i] += left[stack.peek()] + 1;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        stack = new Stack<>();
+
+        for (int i = n-1;i>=0;i--) {
+            while(!stack.isEmpty() && arr[stack.peek()] < arr[i]){
+                right[i] += right[stack.peek()] + 1;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+
+        long result = 0;
+        for (int i =0;i<n;i++) {
+            result += (left[i] + 1) * (right[i] + 1) * arr[i];
+        }
+        return result;
+    }
+}

@@ -1,0 +1,48 @@
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Vector;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+ class Pair {
+    Integer key;
+    Integer value;
+    Pair(Integer key, Integer value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+public class Main{
+    public static void main(String[] args) {
+        Map<Integer, Integer> freq = new HashMap<Integer, Integer>();
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        while (n > 0) {
+            int key = in.nextInt();
+            if (freq.containsKey(key)) {
+                int val = freq.get(key);
+                freq.put(key, val+1);
+            } else {
+                freq.put(key, 1);
+            }
+            n--;
+        }
+        in.close();
+        Vector<Pair> nums = new Vector<>();
+        for (Map.Entry<Integer,Integer> elem: freq.entrySet()) {
+            nums.add(new Pair(elem.getKey(), elem.getValue()));
+        }
+        nums.sort(new Comparator<Pair>(){
+            @Override
+            public int compare(Pair o1, Pair o2) {
+                if (o1.value == o2.value) {
+                    return o2.key - o1.key;
+                }
+                return o2.value - o1.value;
+            }
+        });
+        System.out.println(nums.get(0).key);
+    }
+}
